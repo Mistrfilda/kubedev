@@ -29,3 +29,13 @@ microk8s enable dns dashboard storage
 microk8s enable registry prometheus dashboard
 ```
 
+Docker registry
+----
+Pridani lokalniho registry do docker daemona. Lokalne mam ORBstack, tudiz jit pres `settings > docker` a pridat 
+```
+{
+  "insecure-registries" : [
+    "192.168.1.245:32000"
+  ]
+}
+```
