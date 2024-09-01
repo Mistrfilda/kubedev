@@ -3,7 +3,9 @@ kind: Service
 metadata:
     name: mariadb
 spec:
+    type: NodePort
     ports:
         - port: 3306
+          nodePort: 30036  # Zvol manuálně nebo nech prázdné pro automatický přidělení
     selector:
         app: mariadb
