@@ -10,7 +10,7 @@ spec:
     template:
         metadata:
             labels:
-                app: php-app
+                app: my-pt-php-app
         spec:
             containers:
                 - name: php-container

@@ -18,3 +18,9 @@ My portfolio tracker zprovozneni
    docker push 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0   
 ```
 
+5. Nasadit sluzby
+```shell
+kubectl apply -f php-service.yml
+kubectl apply -f nginx-service.yml
+```
+
