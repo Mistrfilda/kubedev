@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: nginx-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: my-pt-nginx-app
+    template:
+        metadata:
+            labels:
+                app: nginx-app
+        spec:
+            containers:
+                - name: nginx-container
+                  image: 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0
+                  ports:
+                      - containerPort: 80
+                  volumeMounts:
+                      - name: log-data
+                        mountPath: /var/log/nginx
+            volumes:
+                - name: log-data
+                  persistentVolumeClaim:
+                      claimName: my-pt-log-pvc

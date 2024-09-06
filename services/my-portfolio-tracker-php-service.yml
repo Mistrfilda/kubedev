@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: php-service
+spec:
+    selector:
+        app: my-pt-php-app
+    ports:
+        - protocol: TCP
+          port: 9000
+          targetPort: 9000

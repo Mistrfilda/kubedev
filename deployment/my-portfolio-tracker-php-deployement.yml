@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: php-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: my-pt-php-app
+    template:
+        metadata:
+            labels:
+                app: php-app
+        spec:
+            containers:
+                - name: php-container
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.0
+                  ports:
+                      - containerPort: 9000
+                  volumeMounts:
+                      - name: log-data
+                        mountPath: /var/www/log
+            volumes:
+                - name: log-data
+                  persistentVolumeClaim:
+                      claimName: my-pt-log-pvc
