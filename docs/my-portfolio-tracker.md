@@ -24,3 +24,8 @@ kubectl apply -f php-service.yml
 kubectl apply -f nginx-service.yml
 ```
 
+6. Nasadit deployment z `/deployment`
+```shell
+kubectl apply -f my-portfolio-tracker-nginx-deployement.yml
+kubectl apply -f my-portfolio-tracker-php-deployement.yml
+```
