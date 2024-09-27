@@ -39,3 +39,11 @@ Pridani lokalniho registry do docker daemona. Lokalne mam ORBstack, tudiz jit pr
   ]
 }
 ```
+
+Dashboard
+
+Prepnout se do `services`
+```
+microk8s kubectl create token default
+microk8s kubectl apply -f dashboard.yaml
+```

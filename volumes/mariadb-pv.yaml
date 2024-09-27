@@ -2,10 +2,13 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
     name: mariadb-pv
+    labels:
+        type: mariadb
 spec:
     accessModes:
         - ReadWriteOnce
     capacity:
-        storage: 3Gi
+        storage: 10Gi
+    persistentVolumeReclaimPolicy: Retain
     hostPath:
         path: "/mnt/data"

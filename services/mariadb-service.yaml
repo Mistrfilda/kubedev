@@ -6,6 +6,6 @@ spec:
     type: NodePort
     ports:
         - port: 3306
-          nodePort: 30036  # Zvol manuálně nebo nech prázdné pro automatický přidělení
+          nodePort: 30036
     selector:
         app: mariadb
