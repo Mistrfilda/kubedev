@@ -1,8 +1,25 @@
 My portfolio tracker zprovozneni
+
+Restart
+----
+```
+kubectl rollout restart deployment nginx-deployment
+kubectl rollout restart deployment php-deployment
+```
+
+
 -----
 
 1. My-portfolio-tracker jiz pouziva docker containery
-2. Build
+2. Vytovreni volumes z `volumes`
+
+```shell
+microk8s kubectl apply -f my-portfolio-tracker-pv.yml
+microk8s kubectl apply -f my-portfolio-tracker-pvc.yml
+microk8s kubectl apply -f my-portfolio-tracker-log-pvc.yml
+```
+
+3. Build
 ```shell
  docker-compose build
 ``` 
@@ -20,8 +37,8 @@ My portfolio tracker zprovozneni
 
 5. Nasadit sluzby
 ```shell
-kubectl apply -f php-service.yml
-kubectl apply -f nginx-service.yml
+kubectl apply -f my-portfolio-tracker-php-service.yml
+kubectl apply -f my-portfolio-tracker-nginx-service.yml
 ```
 
 6. Nasadit deployment z `/deployment`

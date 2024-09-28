@@ -40,10 +40,41 @@ Pridani lokalniho registry do docker daemona. Lokalne mam ORBstack, tudiz jit pr
 }
 ```
 
+Pridani do mk8s na raspberry pi 
+
+```
+sudo mkdir -p /var/snap/microk8s/current/args/certs.d/192.168.1.245:32000
+sudo touch /var/snap/microk8s/current/args/certs.d/192.168.1.245:32000/hosts.toml
+```
+
+Then, edit the file we just created and make sure the contents are as follows:
+
+`sudo nano /var/snap/microk8s/current/args/certs.d/192.168.1.245:32000/hosts.toml`
+
+```
+# /var/snap/microk8s/current/args/certs.d/192.168.1.245:32000/hosts.toml
+server = "http://192.168.1.245:32000"
+
+[host."http://192.168.1.245:32000"]
+capabilities = ["pull", "resolve"]
+```
+
+a pote
+
+```
+microk8s stop
+microk8s start
+```
+
 Dashboard
+----
+
+Zjisteni tokenu
+```
+microk8s kubectl create token default
+```
 
 Prepnout se do `services`
 ```
-microk8s kubectl create token default
 microk8s kubectl apply -f dashboard.yaml
 ```
