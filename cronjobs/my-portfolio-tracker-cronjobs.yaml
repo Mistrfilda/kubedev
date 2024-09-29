@@ -4,6 +4,7 @@ metadata:
     name: php-harvest-download
 spec:
     schedule: "*/3 * * * *"
+    suspend: true
     jobTemplate:
         spec:
             template:
