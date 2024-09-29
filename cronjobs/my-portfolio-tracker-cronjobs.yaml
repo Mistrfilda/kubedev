@@ -3,8 +3,8 @@ kind: CronJob
 metadata:
     name: php-harvest-download
 spec:
-    schedule: "*/3 * * * *"
-    suspend: true
+    schedule: "*/30 * * * *"
+    suspend: false
     jobTemplate:
         spec:
             template:
@@ -12,7 +12,7 @@ spec:
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.9
-                          command: ["cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
