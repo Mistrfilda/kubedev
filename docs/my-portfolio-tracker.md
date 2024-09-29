@@ -8,10 +8,11 @@ kubectl rollout restart deployment php-deployment
 ```
 
 
+Instalace
 -----
 
 1. My-portfolio-tracker jiz pouziva docker containery
-2. Vytovreni volumes z `volumes`
+2. Vytvoreni volumes z `volumes`
 
 ```shell
 microk8s kubectl apply -f my-portfolio-tracker-pv.yml
@@ -45,4 +46,14 @@ kubectl apply -f my-portfolio-tracker-nginx-service.yml
 ```shell
 kubectl apply -f my-portfolio-tracker-nginx-deployement.yml
 kubectl apply -f my-portfolio-tracker-php-deployement.yml
+```
+
+7. Nasadit cronjobs z `cronjobs`
+```shell
+kubectl apply -f my-portfolio-tracker-cronjobs.yaml
+```
+
+8. Nasadit konfiguraci pro ingress z `ingress`
+```shell
+kubectl apply -f my-portfolio-tracker-nginx-ingress.yaml
 ```
