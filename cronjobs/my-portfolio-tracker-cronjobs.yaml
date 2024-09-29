@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-harvest-download
+spec:
+    schedule: "*/3 * * * *"
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.9
+                          command: ["cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
