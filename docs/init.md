@@ -27,6 +27,7 @@ sudo chown -R filip ~/.kube
 sudo reboot 
 microk8s enable dns dashboard storage
 microk8s enable registry prometheus dashboard
+microk8s enable ingress
 ```
 
 Docker registry
