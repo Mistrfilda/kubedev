@@ -6,7 +6,7 @@ metadata:
         nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
     rules:
-        - host: my-portfolio-tracker.local
+        - host: my-new-portfolio-tracker.internal
           http:
               paths:
                   - path: /
