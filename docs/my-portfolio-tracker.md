@@ -26,14 +26,14 @@ microk8s kubectl apply -f my-portfolio-tracker-log-pvc.yml
 ``` 
 3. Tag
 ```shell
- docker tag my-portfolio-tracker-php 192.168.1.245:32000/my-portfolio-tracker-php:1.0
- docker tag my-portfolio-tracker-nginx 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0
+docker tag my-portfolio-tracker-php 192.168.1.245:32000/my-portfolio-tracker-php:1.0
+docker tag my-portfolio-tracker-nginx 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0
 ```
 
 4. Push
 ```shell
-   docker push 192.168.1.245:32000/my-portfolio-tracker-php:1.0
-   docker push 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0   
+docker push 192.168.1.245:32000/my-portfolio-tracker-php:1.0
+docker push 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0   
 ```
 
 5. Nasadit sluzby
