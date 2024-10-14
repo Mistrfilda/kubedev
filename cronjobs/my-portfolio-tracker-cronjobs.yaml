@@ -21,6 +21,9 @@ spec:
                         - name: log-data
                           persistentVolumeClaim:
                               claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
 
 ---
 
@@ -47,6 +50,9 @@ spec:
                         - name: log-data
                           persistentVolumeClaim:
                               claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
 
 ---
 
@@ -73,6 +79,9 @@ spec:
                         - name: log-data
                           persistentVolumeClaim:
                               claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
 
 ---
 
@@ -99,3 +108,6 @@ spec:
                         - name: log-data
                           persistentVolumeClaim:
                               claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
