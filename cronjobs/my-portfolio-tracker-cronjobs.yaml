@@ -11,7 +11,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.25
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
                           volumeMounts:
                               - name: log-data
@@ -42,7 +42,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.25
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-all"]
                           volumeMounts:
                               - name: log-data
@@ -73,7 +73,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.25
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-dividends"]
                           volumeMounts:
                               - name: log-data
@@ -104,7 +104,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.25
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar save-current-portfolio-statistics"]
                           volumeMounts:
                               - name: log-data
