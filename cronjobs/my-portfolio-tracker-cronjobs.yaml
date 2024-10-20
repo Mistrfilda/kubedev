@@ -13,6 +13,9 @@ spec:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
@@ -44,6 +47,9 @@ spec:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-all"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
@@ -75,6 +81,9 @@ spec:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-dividends"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
@@ -106,6 +115,9 @@ spec:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.26
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar save-current-portfolio-statistics"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
