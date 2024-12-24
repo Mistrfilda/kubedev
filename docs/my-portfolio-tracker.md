@@ -15,9 +15,9 @@ Instalace
 2. Vytvoreni volumes z `volumes`
 
 ```shell
-microk8s kubectl apply -f my-portfolio-tracker-pv.yml
-microk8s kubectl apply -f my-portfolio-tracker-pvc.yml
-microk8s kubectl apply -f my-portfolio-tracker-log-pvc.yml
+microk8s kubectl apply -f my-portfolio-tracker-pv.yaml
+microk8s kubectl apply -f my-portfolio-tracker-pvc.yaml
+microk8s kubectl apply -f my-portfolio-tracker-log-pvc.yaml
 ```
 
 3. Build
@@ -38,14 +38,14 @@ docker push 192.168.1.245:32000/my-portfolio-tracker-nginx:1.0
 
 5. Nasadit sluzby
 ```shell
-kubectl apply -f my-portfolio-tracker-php-service.yml
-kubectl apply -f my-portfolio-tracker-nginx-service.yml
+kubectl apply -f my-portfolio-tracker-php-service.yaml
+kubectl apply -f my-portfolio-tracker-nginx-service.yaml
 ```
 
 6. Nasadit deployment z `/deployment`
 ```shell
-kubectl apply -f my-portfolio-tracker-nginx-deployement.yml
-kubectl apply -f my-portfolio-tracker-php-deployement.yml
+kubectl apply -f my-portfolio-tracker-nginx-deployement.yaml
+kubectl apply -f my-portfolio-tracker-php-deployement.yaml
 ```
 
 7. Nasadit cronjobs z `cronjobs`
