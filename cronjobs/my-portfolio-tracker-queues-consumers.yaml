@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-notification-queue-consumer
+spec:
+    schedule: "*/2 * * * *"
+    suspend: false
+    concurrencyPolicy: Forbid
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.58
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar consumer-queue notificationConsumer 2"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                              - name: puppeter
+                                mountPath: /var/puppeter/files
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
