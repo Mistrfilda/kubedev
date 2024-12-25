@@ -12,8 +12,8 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.58
-                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar consumer-queue notificationConsumer 2"]
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.59
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar consumer-queue notificationConsumer 1800"]
                           securityContext:
                               runAsUser: 33 # UID www-data
                               runAsGroup: 33 # GID www-data
