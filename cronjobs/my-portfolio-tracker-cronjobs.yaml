@@ -11,7 +11,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -45,7 +45,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-all"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -79,7 +79,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-dividends"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -113,7 +113,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar save-current-portfolio-statistics"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -147,7 +147,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar migm"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -182,8 +182,144 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.61
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar declare-queues"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                              - name: puppeter
+                                mountPath: /var/puppeter/files
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-daily-price-alerts
+spec:
+    schedule: "0 13,17,23 * * MON-FRI"
+    suspend: false
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 1 3"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                              - name: puppeter
+                                mountPath: /var/puppeter/files
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-daily-price-alerts
+spec:
+    schedule: "0 13,17,23 * * MON-FRI"
+    suspend: false
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 1 3"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                              - name: puppeter
+                                mountPath: /var/puppeter/files
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-weekly-price-alerts
+spec:
+    schedule: "05 17 * * MON-FRI"
+    suspend: false
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 7 3"]
+                          securityContext:
+                              runAsUser: 33 # UID www-data
+                              runAsGroup: 33 # GID www-data
+                          volumeMounts:
+                              - name: log-data
+                                mountPath: /var/log
+                              - name: puppeter
+                                mountPath: /var/puppeter/files
+                    restartPolicy: OnFailure
+                    volumes:
+                        - name: log-data
+                          persistentVolumeClaim:
+                              claimName: my-pt-log-pvc
+                        - name: puppeter
+                          persistentVolumeClaim:
+                              claimName: my-pt-puppeter-pvc
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: php-monthly-price-alerts
+spec:
+    schedule: "10 17 * * MON,FRI"
+    suspend: false
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+                        - name: php-container
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.62
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 30 3"]
                           securityContext:
                               runAsUser: 33 # UID www-data
                               runAsGroup: 33 # GID www-data
