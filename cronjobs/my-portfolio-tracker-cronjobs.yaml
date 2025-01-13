@@ -55,7 +55,7 @@ spec:
                                 mountPath: /var/log
                               - name: puppeter
                                 mountPath: /var/puppeter/files
-                    restartPolicy: OnFailure
+                    restartPolicy: Never
                     volumes:
                         - name: log-data
                           persistentVolumeClaim:
@@ -89,7 +89,7 @@ spec:
                                 mountPath: /var/log
                               - name: puppeter
                                 mountPath: /var/puppeter/files
-                    restartPolicy: OnFailure
+                    restartPolicy: Never
                     volumes:
                         - name: log-data
                           persistentVolumeClaim:
