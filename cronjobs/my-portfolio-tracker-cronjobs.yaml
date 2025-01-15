@@ -43,7 +43,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -78,7 +78,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -113,7 +113,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -148,7 +148,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -184,7 +184,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -219,7 +219,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -253,7 +253,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
@@ -288,7 +288,7 @@ spec:
         spec:
             template:
                 spec:
-                    ttlSecondsAfterFinished: 86400
+                    ttlSecondsAfterFinished: 3200
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.80
