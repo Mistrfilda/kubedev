@@ -1,4 +1,5 @@
 My portfolio tracker zprovozneni
+-----
 
 Restart
 ----

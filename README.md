@@ -5,3 +5,4 @@ My kubedev
 - [my-portfolio-tracker](docs/my-portfolio-tracker.md)
 - [uptime-kuma](docs/uptime-kuma.md)
 - [rabbitmq.md](docs/rabbitmq.md)
+- [K8S update](docs/k8s-update.md)
