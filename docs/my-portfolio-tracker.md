@@ -45,8 +45,8 @@ kubectl apply -f my-portfolio-tracker-nginx-service.yaml
 
 6. Nasadit deployment z `/deployment`
 ```shell
-kubectl apply -f my-portfolio-tracker-nginx-deployement.yaml
-kubectl apply -f my-portfolio-tracker-php-deployement.yaml
+kubectl apply -f my-portfolio-tracker-nginx-deployment.yaml
+kubectl apply -f my-portfolio-tracker-php-deployment.yaml
 ```
 
 7. Nasadit cronjobs z `cronjobs`
