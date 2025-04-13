@@ -9,4 +9,4 @@ TIMESTAMP=$(date +%Y%m%d%H%M%S)
 
 microk8s kubectl create job --from=cronjob/php-database-migrations "manual-cronjob-run-php-database-migration-$TIMESTAMP"
 microk8s kubectl create job --from=cronjob/php-rabbitmq-queues "manual-cronjob-run-php-rabbitmq-queues-2-$TIMESTAMP"
-microk8s kubectl create job --from=cronjob/php-doctrine-generate-proxies "manual-cronjob-run-php-doctrine-generate-proxies-3-$TIMESTAMP"
+microk8s kubectl create job --from=cronjob/php-doctrine-generate-proxies "manual-cronjob-run-php-proxies-3-$TIMESTAMP"
