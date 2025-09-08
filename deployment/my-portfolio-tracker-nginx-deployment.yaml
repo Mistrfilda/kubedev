@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 - name: nginx-container
-                  image: 192.168.1.245:32000/my-portfolio-tracker-nginx:1.112
+                  image: 192.168.1.245:32000/my-portfolio-tracker-nginx:1.113
                   ports:
                       - containerPort: 80
                   volumeMounts:
