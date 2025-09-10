@@ -6,6 +6,7 @@ Restart
 ```
 kubectl rollout restart deployment nginx-deployment
 kubectl rollout restart deployment php-deployment
+microk8s kubectl rollout restart statefulset mariadb
 ```
 
 
