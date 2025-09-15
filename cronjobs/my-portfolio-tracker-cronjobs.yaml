@@ -124,13 +124,6 @@ spec:
                           securityContext:
                               runAsUser: 33 # UID www-data
                               runAsGroup: 33 # GID www-data
-                          resources:
-                              requests:
-                                  memory: "512Mi"
-                                  cpu: "500m"
-                              limits:
-                                  memory: "2Gi"
-                                  cpu: "1"
                           volumeMounts:
                               - name: log-data
                                 mountPath: /var/log
