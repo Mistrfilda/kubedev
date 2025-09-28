@@ -6,3 +6,4 @@ My kubedev
 - [uptime-kuma](docs/uptime-kuma.md)
 - [rabbitmq.md](docs/rabbitmq.md)
 - [K8S update](docs/k8s-update.md)
+- [Refresh K8S certificates](docs/refresh-certs.md)
