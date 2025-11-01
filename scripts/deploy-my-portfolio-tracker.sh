@@ -1,9 +1,13 @@
 #!/bin/bash
 
 microk8s kubectl apply -f /var/kubedev/kubedev/cronjobs/my-portfolio-tracker-cronjobs.yaml
-microk8s kubectl apply -f /var/kubedev/kubedev/cronjobs/my-portfolio-tracker-queues-consumers.yaml
 microk8s kubectl apply -f /var/kubedev/kubedev/deployment/my-portfolio-tracker-nginx-deployment.yaml
 microk8s kubectl apply -f /var/kubedev/kubedev/deployment/my-portfolio-tracker-php-deployment.yaml
+
+microk8s kubectl delete cronjob php-notification-queue-consumer
+microk8s kubectl delete cronjob php-job-request-consumer
+
+microk8s kubectl apply -f /var/kubedev/kubedev/cronjobs/my-portfolio-tracker-queues-consumers.yaml
 
 TIMESTAMP=$(date +%Y%m%d%H%M%S)
 
