@@ -16,11 +16,11 @@ check_consumer() {
     echo "Checking $consumer_name..."
 
     # Hledat běžící pody pro daný cronjob
-    running_pods=$(microk8s kubectl get pods -l "job-name" --field-selector=status.phase=Running -o json | \
+    running_pods=$(/snap/bin/microk8s kubectl get pods -l "job-name" --field-selector=status.phase=Running -o json | \
         jq -r --arg name "$cronjob_name" '.items[] | select(.metadata.labels["job-name"] | startswith($name)) | .metadata.name')
 
     # Alternativně kontrola všech podů (i pending/succeeded v poslední době)
-    active_pods=$(microk8s kubectl get pods -l "job-name" -o json | \
+    active_pods=$(/snap/bin/microk8s kubectl get pods -l "job-name" -o json | \
         jq -r --arg name "$cronjob_name" '.items[] | select(.metadata.labels["job-name"] | startswith($name)) | select(.status.phase == "Running" or .status.phase == "Pending") | .metadata.name')
 
     if [ -n "$running_pods" ] || [ -n "$active_pods" ]; then
