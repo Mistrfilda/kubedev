@@ -84,7 +84,7 @@ spec:
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.180
-                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-dividends"]
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar stock-valuation"]
                           securityContext:
                               runAsUser: 33 # UID www-data
                               runAsGroup: 33 # GID www-data
