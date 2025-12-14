@@ -36,7 +36,7 @@ Upraveno `services/my-portfolio-tracker-nginx-service.yaml`:
 kubectl apply -f services/my-portfolio-tracker-nginx-service.yaml
 ```
 
-### 6Změna uptime-kuma služby na NodePort
+### 6. Změna uptime-kuma služby na NodePort
 Upraveno `services/uptime-kuma-service.yaml`:
 - Změna z `type: LoadBalancer` na `type: NodePort`
 - Důvod: Uvolnit IP adresu 192.168.1.245 pro Traefik
@@ -45,7 +45,7 @@ Upraveno `services/uptime-kuma-service.yaml`:
 kubectl apply -f services/uptime-kuma-service.yaml
 ``` 
 
-### 7Restart MetalLB (pokud IP zůstává pending)
+### 7. Restart MetalLB (pokud IP zůstává pending)
 ```bash 
 kubectl rollout restart deployment controller -n metallb-system kubectl rollout restart daemonset speaker -n metallb-system
 ```
@@ -139,4 +139,3 @@ kubectl get svc -n traefik traefik
 - MetalLB přiděluje IP adresy službám, ne porty
 - Každá LoadBalancer služba potřebuje vlastní IP z poolu
 - Traefik v MicroK8s používá standardně porty 8000/8443, s MetalLB může používat 80/443
--
