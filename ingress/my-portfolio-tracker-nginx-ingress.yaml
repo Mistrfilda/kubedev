@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: nginx-ingress
+    name: traefik-ingress
     annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
+        traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
-    ingressClassName: public
+    ingressClassName: traefik
     rules:
         - host: my-new-portfolio-tracker.internal
           http:
