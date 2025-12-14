@@ -21,12 +21,12 @@ microk8s enable metallb:192.168.1.245-192.168.1.245
 kubectl apply -f ingress/my-portfolio-tracker-traefik-ingress.yaml
 ```
 
-5. Smazání starého NGINX Ingress
+### 4. Smazání starého NGINX Ingress
 ```bash 
 kubectl delete ingress nginx-ingress
 ``` 
 
-### 6. Změna nginx-service na ClusterIP
+### 5. Změna nginx-service na ClusterIP
 Upraveno `services/my-portfolio-tracker-nginx-service.yaml`:
 - Změna z `type: LoadBalancer` na `type: ClusterIP`
 - Traefik Ingress se postará o routing, nepotřebujeme LoadBalancer
@@ -36,7 +36,7 @@ Upraveno `services/my-portfolio-tracker-nginx-service.yaml`:
 kubectl apply -f services/my-portfolio-tracker-nginx-service.yaml
 ```
 
-7. Změna uptime-kuma služby na NodePort
+### 6Změna uptime-kuma služby na NodePort
 Upraveno `services/uptime-kuma-service.yaml`:
 - Změna z `type: LoadBalancer` na `type: NodePort`
 - Důvod: Uvolnit IP adresu 192.168.1.245 pro Traefik
@@ -45,7 +45,7 @@ Upraveno `services/uptime-kuma-service.yaml`:
 kubectl apply -f services/uptime-kuma-service.yaml
 ``` 
 
-8. Restart MetalLB (pokud IP zůstává pending)
+### 7Restart MetalLB (pokud IP zůstává pending)
 ```bash 
 kubectl rollout restart deployment controller -n metallb-system kubectl rollout restart daemonset speaker -n metallb-system
 ```
