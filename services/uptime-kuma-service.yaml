@@ -4,7 +4,7 @@ metadata:
     name: uptime-kuma-tcp
     namespace: uptime-kuma
 spec:
-    type: LoadBalancer
+    type: NodePort
     ports:
         - name: kuma-web-ui
           protocol: TCP
