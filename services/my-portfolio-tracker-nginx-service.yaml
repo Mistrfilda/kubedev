@@ -3,7 +3,7 @@ kind: Service
 metadata:
     name: nginx-service
 spec:
-    type: LoadBalancer
+    type: ClusterIP
     selector:
         app: my-pt-nginx-app
     ports:
