@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
     name: rabbitmq
     labels:
         app: rabbitmq
     namespace: rabbitmq-app
 spec:
+    serviceName: "rabbitmq"
     replicas: 1
     selector:
         matchLabels:
@@ -17,12 +18,25 @@ spec:
         spec:
             containers:
                 - name: rabbitmq
-                  image: localhost:32000/my-rabbitmq-image:1.0
+                  image: localhost:32000/my-rabbitmq-image:1.1
                   ports:
                       - containerPort: 5672
+                        name: amqp
                       - containerPort: 15672
+                        name: management
                   env:
                       - name: RABBITMQ_DEFAULT_USER
                         value: "appuser"
                       - name: RABBITMQ_DEFAULT_PASS
                         value: "extremelysecretrabbit"
+                  volumeMounts:
+                      - name: rabbitmq-data
+                        mountPath: /var/lib/rabbitmq
+    volumeClaimTemplates:
+        - metadata:
+              name: rabbitmq-data
+          spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                  requests:
+                      storage: 2Gi
