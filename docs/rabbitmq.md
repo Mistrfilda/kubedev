@@ -15,3 +15,9 @@ docker tag my-rabbitmq-image:1.0 192.168.1.245:32000/my-rabbitmq-image:1.0
 ```shell
 docker push 192.168.1.245:32000/my-rabbitmq-image:1.0
 ```
+
+4. Deploy script
+
+```
+sh scripts/deploy-rabbitmq.sh
+```
