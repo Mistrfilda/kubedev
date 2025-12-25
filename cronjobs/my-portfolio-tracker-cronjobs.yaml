@@ -39,7 +39,7 @@ metadata:
     name: php-download-all-data
 spec:
     schedule: "25,35,45 12,16,22 * * MON-FRI"
-    suspend: true
+    suspend: false
     jobTemplate:
         spec:
             ttlSecondsAfterFinished: 86400
