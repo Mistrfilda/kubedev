@@ -38,8 +38,8 @@ kind: CronJob
 metadata:
     name: php-download-all-data
 spec:
-    schedule: "35,40,45 12,16,22 * * MON-FRI"
-    suspend: false
+    schedule: "25,35,45 12,16,22 * * MON-FRI"
+    suspend: true
     jobTemplate:
         spec:
             ttlSecondsAfterFinished: 86400
