@@ -22,6 +22,8 @@ spec:
                         mountPath: /var/log
                       - name: puppeter
                         mountPath: /var/puppeter/files
+                      - name: gemini
+                        mountPath: /var/resources/gemini
             volumes:
                 - name: log-data
                   persistentVolumeClaim:
@@ -29,3 +31,6 @@ spec:
                 - name: puppeter
                   persistentVolumeClaim:
                       claimName: my-pt-puppeter-pvc
+                - name: gemini
+                  persistentVolumeClaim:
+                      claimName: my-pt-gemini-pvc
