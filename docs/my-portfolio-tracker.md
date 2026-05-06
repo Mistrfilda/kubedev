@@ -13,6 +13,7 @@ microk8s kubectl rollout restart statefulset mariadb
 Instalace
 -----
 
+
 1. My-portfolio-tracker jiz pouziva docker containery
 2. Vytvoreni volumes z `volumes`
 
@@ -20,6 +21,8 @@ Instalace
 microk8s kubectl apply -f my-portfolio-tracker-pv.yaml
 microk8s kubectl apply -f my-portfolio-tracker-pvc.yaml
 microk8s kubectl apply -f my-portfolio-tracker-log-pvc.yaml
+microk8s kubectl apply -f my-portfolio-tracker-puppeter-pvc.yaml
+microk8s kubectl apply -f my-portfolio-tracker-gemini-pvc.yaml
 ```
 
 3. Build
