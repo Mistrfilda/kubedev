@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: morris-app-log-viewer
+    namespace: morris
+spec:
+    serviceName: "morris-app"
+    replicas: 1
+    selector:
+        matchLabels:
+            app: morris-app
+    template:
+        metadata:
+            labels:
+                app: morris-app
+        spec:
+            containers:
+                - image: 192.168.1.245:32000/morris-app-log-viewer:0.1.1
+                  name: morris-app
+                  ports:
+                      - containerPort: 3000
+                        name: morris-app
+                  volumeMounts:
+                      - name: log-data
+                        mountPath: /var/log
+            volumes:
+                - name: log-data
+                  persistentVolumeClaim:
+                      claimName: my-pt-log-pvc
