@@ -21,7 +21,7 @@ spec:
                         name: morris-app
                   volumeMounts:
                       - name: log-data
-                        mountPath: /var/log
+                        mountPath: /app/files
             volumes:
                 - name: log-data
                   persistentVolumeClaim:
