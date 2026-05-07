@@ -3,9 +3,11 @@ kind: Service
 metadata:
     name: morris-app-log-viewer
 spec:
-    selector:
-        app: morris-app
+    type: NodePort
     ports:
-        - protocol: TCP
+        - name: morris-app
+          protocol: TCP
           port: 3000
           targetPort: 3000
+    selector:
+        app: morris-app
