@@ -97,7 +97,7 @@ spec:
                     containers:
                         - name: php-container
                           image: 192.168.1.245:32000/my-portfolio-tracker-php:1.301
-                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar consumer-queue aiClientsQueue 1000"]
+                          command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar consumer-queue aiClientsConsumer 1000"]
                           securityContext:
                               runAsUser: 33 # UID www-data
                               runAsGroup: 33 # GID www-data
