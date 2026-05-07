@@ -6,6 +6,7 @@ microk8s kubectl apply -f /var/kubedev/kubedev/deployment/my-portfolio-tracker-p
 
 microk8s kubectl delete cronjob php-notification-queue-consumer
 microk8s kubectl delete cronjob php-job-request-consumer
+microk8s kubectl delete cronjob php-ai-queue-consumer
 
 microk8s kubectl apply -f /var/kubedev/kubedev/cronjobs/my-portfolio-tracker-queues-consumers.yaml
 
