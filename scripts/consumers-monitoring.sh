@@ -3,6 +3,7 @@
 # Uptime Kuma heartbeat URLs
 NOTIFICATION_CONSUMER_URL="http://192.168.1.245:32273/api/push/SpKJSUjMdu?status=up&msg=OK&ping="
 JOB_REQUEST_CONSUMER_URL="http://192.168.1.245:32273/api/push/y1unkmiD2t?status=up&msg=OK&ping="
+AI_CONSUMER_URL="http://192.168.1.245:32273/api/push/QztTx7jarUI9f6rp22V1QL3yIAheU3Wk?status=up&msg=OK&ping="
 
 echo "=== Checking Queue Consumers at $(date) ==="
 
@@ -52,6 +53,9 @@ check_consumer "php-notification-queue-consumer" "$NOTIFICATION_CONSUMER_URL" "N
 notification_status=$?
 
 check_consumer "php-job-request-consumer" "$JOB_REQUEST_CONSUMER_URL" "Job Request Consumer"
+job_request_status=$?
+
+check_consumer "php-ai-queue-consumer" "$AI_CONSUMER_URL" "AI queue Consumer"
 job_request_status=$?
 
 echo ""
