@@ -14,7 +14,7 @@ spec:
                 app: morris-app
         spec:
             containers:
-                - image: 192.168.1.245:32000/morris-app-log-viewer:0.1.2
+                - image: 192.168.1.245:32000/morris-app-log-viewer:0.1.3
                   name: morris-app
                   ports:
                       - containerPort: 3000
