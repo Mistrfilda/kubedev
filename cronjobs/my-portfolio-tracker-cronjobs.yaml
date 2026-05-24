@@ -12,7 +12,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar harvest-download"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -52,7 +52,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-all"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -93,7 +93,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar stock-valuation"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -134,7 +134,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar stock-asset-industry-values"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -175,7 +175,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar download-dividends"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -215,7 +215,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar save-current-portfolio-statistics"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -255,7 +255,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar migm"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -296,7 +296,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar declare-queues"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -336,7 +336,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar doctrine-proxies"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -376,7 +376,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 1 3"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -415,7 +415,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 7 3"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -455,7 +455,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar asset-trend 30 3"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -495,7 +495,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar monitoring-push-monitors"]
                           securityContext:
                               runAsUser: 33 # UID www-data
@@ -535,7 +535,7 @@ spec:
                 spec:
                     containers:
                         - name: php-container
-                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.312
+                          image: 192.168.1.245:32000/my-portfolio-tracker-php:1.313
                           command: ["sh", "-c", "cd /var && COMPOSER_ALLOW_SUPERUSER=1 php composer.phar crypto-download-data"]
                           securityContext:
                               runAsUser: 33 # UID www-data
