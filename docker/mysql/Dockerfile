@@ -1,4 +1,4 @@
-FROM mariadb:10.5
+FROM mariadb:11.4.13
 ENV MYSQL_ROOT_PASSWORD=my-secret-pw
 ENV MYSQL_DATABASE=mydatabase
 ENV MYSQL_USER=myuser

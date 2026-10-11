@@ -13,10 +13,25 @@ spec:
             labels:
                 app: mariadb
         spec:
+            terminationGracePeriodSeconds: 120
             containers:
-                - image: localhost:32000/my-mariadb:1.0
+                - image: localhost:32000/my-mariadb:11.4.13
                   name: mariadb
+                  startupProbe:
+                      exec:
+                          command: ["healthcheck.sh", "--connect", "--innodb_initialized"]
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                      failureThreshold: 60
+                  readinessProbe:
+                      exec:
+                          command: ["healthcheck.sh", "--connect", "--innodb_initialized"]
+                      periodSeconds: 5
+                      timeoutSeconds: 5
+                      failureThreshold: 3
                   env:
+                      - name: MARIADB_AUTO_UPGRADE
+                        value: "1"
                       - name: MYSQL_ROOT_PASSWORD
                         value: my-secret-pw
                   ports:
