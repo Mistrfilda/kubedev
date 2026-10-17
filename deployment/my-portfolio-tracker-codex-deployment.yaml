@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: php-codex-worker
+spec:
+    replicas: 1
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            app: php-codex-worker
+    template:
+        metadata:
+            labels:
+                app: php-codex-worker
+        spec:
+            automountServiceAccountToken: false
+            terminationGracePeriodSeconds: 30
+            securityContext:
+                runAsUser: 33
+                runAsGroup: 33
+                fsGroup: 33
+            initContainers:
+                - name: codex-volume-permissions
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.368
+                  command: ["sh", "-c", "chown 33:33 /codex && chmod 700 /codex"]
+                  securityContext:
+                      runAsUser: 0
+                      runAsGroup: 0
+                  volumeMounts:
+                      - name: codex
+                        mountPath: /codex
+            containers:
+                - name: codex-worker
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.368
+                  imagePullPolicy: Always
+                  workingDir: /var
+                  command: ["/usr/bin/tini", "--", "php", "bin/console", "stock-ai-analysis:codex-worker"]
+                  env:
+                      - name: HOME
+                        value: /codex/home
+                      - name: CODEX_HOME
+                        value: /codex/home
+                  resources:
+                      requests:
+                          cpu: 100m
+                          memory: 256Mi
+                      limits:
+                          cpu: "2"
+                          memory: 1Gi
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop: ["ALL"]
+                  volumeMounts:
+                      - name: codex
+                        mountPath: /codex
+                      - name: log-data
+                        mountPath: /var/log
+            volumes:
+                - name: codex
+                  persistentVolumeClaim:
+                      claimName: my-pt-codex-pvc
+                - name: log-data
+                  persistentVolumeClaim:
+                      claimName: my-pt-log-pvc
