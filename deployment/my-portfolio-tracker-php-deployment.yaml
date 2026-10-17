@@ -12,9 +12,22 @@ spec:
             labels:
                 app: my-pt-php-app
         spec:
+            initContainers:
+                - name: oauth-volume-permissions
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.371
+                  command: ["/bin/sh", "-ec"]
+                  args:
+                      - |
+                          chown -R www-data:www-data /var/resources/oauth
+                          chmod 0700 /var/resources/oauth
+                  securityContext:
+                      runAsUser: 0
+                  volumeMounts:
+                      - name: oauth
+                        mountPath: /var/resources/oauth
             containers:
                 - name: php-container
-                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.370
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.371
                   ports:
                       - containerPort: 9000
                   volumeMounts:
@@ -24,6 +37,8 @@ spec:
                         mountPath: /var/puppeter/files
                       - name: gemini
                         mountPath: /var/resources/gemini
+                      - name: oauth
+                        mountPath: /var/resources/oauth
             volumes:
                 - name: log-data
                   persistentVolumeClaim:
@@ -34,3 +49,6 @@ spec:
                 - name: gemini
                   persistentVolumeClaim:
                       claimName: my-pt-gemini-pvc
+                - name: oauth
+                  persistentVolumeClaim:
+                      claimName: my-pt-oauth-pvc

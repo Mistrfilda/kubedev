@@ -1,5 +1,6 @@
 #!/bin/bash
 
+microk8s kubectl apply -f /var/kubedev/kubedev/volumes/my-portfolio-tracker-oauth-pvc.yaml || exit 1
 microk8s kubectl apply -f /var/kubedev/kubedev/cronjobs/my-portfolio-tracker-cronjobs.yaml
 microk8s kubectl apply -f /var/kubedev/kubedev/deployment/my-portfolio-tracker-nginx-deployment.yaml
 microk8s kubectl apply -f /var/kubedev/kubedev/deployment/my-portfolio-tracker-php-deployment.yaml
