@@ -14,7 +14,7 @@ spec:
         spec:
             initContainers:
                 - name: oauth-volume-permissions
-                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.380
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.381
                   command: ["/bin/sh", "-ec"]
                   args:
                       - |
@@ -27,7 +27,7 @@ spec:
                         mountPath: /var/resources/oauth
             containers:
                 - name: php-container
-                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.380
+                  image: 192.168.1.245:32000/my-portfolio-tracker-php:1.381
                   ports:
                       - containerPort: 9000
                   volumeMounts:
