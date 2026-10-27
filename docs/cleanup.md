@@ -1,78 +1,60 @@
-# Cleanup MicroK8s disk space
+# Údržba místa na Raspberry Pi
 
-There are two separate image stores:
+Server: `filip@192.168.1.245`, repozitář: `/var/kubedev/kubedev`.
+Na Pi používej aktuální verzi repozitáře po commitu a `git pull`.
 
-1. the built-in Docker Registry on port `32000`;
-2. the local containerd cache used by running Kubernetes workloads.
+## Registry: ruční úklid
 
-Cleaning one does not clean the other.
-
-## Built-in Registry
-
-The retention script works both from a workstation with the `microk8s`
-`kubectl` context and directly on the Raspberry Pi:
+Na Pi pod uživatelem `filip`:
 
 ```bash
+cd /var/kubedev/kubedev
+
+# 1. Náhled: vypíše, co ponechá a co smaže. Nic nemění.
 ./scripts/cleanup-registry-images.sh
-```
 
-The default invocation is a read-only preview. It only handles:
-
-- `my-portfolio-tracker-nginx`;
-- `my-portfolio-tracker-php`.
-
-For each repository it keeps:
-
-- the five numerically newest tags;
-- tags referenced by Deployments, StatefulSets, DaemonSets, CronJobs and
-  currently active Pods;
-- every non-numeric tag.
-
-Historical ReplicaSets and completed Jobs are intentionally not protected.
-Consequently, a Kubernetes rollback older than the retained window may no
-longer be able to pull its image.
-
-Dependencies:
-
-- `bash`;
-- `curl`;
-- `jq`;
-- either `kubectl`, `microk8s kubectl`, or `/snap/bin/microk8s kubectl`.
-
-Delete the manifests shown by the preview:
-
-```bash
-./scripts/cleanup-registry-images.sh --apply
-```
-
-Deleting manifests does not immediately release disk space. Run deletion and
-garbage collection together during a maintenance window:
-
-```bash
+# 2. Po kontrole náhledu: smaže staré verze a uvolní místo.
 ./scripts/cleanup-registry-images.sh --apply --garbage-collect
+
+# 3. Kontrola výsledku.
+df -h /
+/snap/bin/microk8s kubectl -n container-registry get pods
 ```
 
-Garbage collection temporarily switches the Registry to read-only mode,
-restarts its Pod, performs the cleanup and restores read-write mode. Image
-pushes are rejected while it is read-only and the single Registry Pod restarts
-can also briefly interrupt pulls, so use a maintenance window.
+Skript maže staré verze pouze z `my-portfolio-tracker-nginx` a
+`my-portfolio-tracker-php`. Ponechává 5 nejnovějších číselných verzí,
+verze používané aktuálními workloady a všechny nečíselné tagy.
+Verze mimo retenci už nemusí být dostupné pro rollback.
 
-The defaults can be overridden:
+Úklid má dva kroky: smazání manifestů odstraní odkazy na staré images;
+**garbage collection potom fyzicky smaže nepoužívaná data z disku**.
+Samotné `--apply` místo neuvolní, pro běžnou údržbu používej oba přepínače.
+Skript sám dočasně zapne read-only, restartuje registry a obnoví zápis.
+Spouštěj ho mimo build/push/deploy; při restartu mohou krátce selhat i pully.
+Registry se zatím automaticky neuklízí. Úklid spouštěj po větším počtu deployů
+nebo když její velikost roste.
+
+Dne 27. 10. 2026 tento postup odstranil 59 tagů / 47 manifestů a následně
+5 884 nepoužívaných datových objektů. Registry klesla z asi 109 na 8,3 GiB.
+
+## Lokální cache containerd
+
+Je oddělená od registry. Při uvedeném úklidu se nemazala a zabírala asi 59 GiB.
+Spravuje ji kubelet; aktuálně spouští úklid při zaplnění disku nad 85 %.
+Není součástí běžného postupu výše. Soubory v `/var/snap` nemaž ručně.
+
+## Databázové zálohy
+
+Stahování běží ve 03:00 přes `/var/vps-backups/download_backup.sh`.
+Retence ve Filipově crontabu běží ve 04:00 a ponechává posledních 30 dní
+plus jednu zálohu za každý z 12 posledních dostupných měsíců.
+Řádek pro spouštění přímo z repozitáře je v
+[`maintenance/vps-backup-retention.cron`](../maintenance/vps-backup-retention.cron).
+
+Ruční kontrola a případný úklid na Pi:
 
 ```bash
-./scripts/cleanup-registry-images.sh \
-    --registry-url http://192.168.1.245:32000 \
-    --keep 5
-```
-
-Use `--verbose` to include every selected tag and manifest digest in the
-preview.
-
-## Local containerd cache
-
-This is independent from Registry retention. To remove images no longer used
-by containers on the MicroK8s node:
-
-```bash
-sudo microk8s ctr images prune --all
+python3 /var/kubedev/kubedev/scripts/cleanup-vps-backups.py
+# Pouze pokud chceš náhled provést:
+python3 /var/kubedev/kubedev/scripts/cleanup-vps-backups.py --apply
 ```

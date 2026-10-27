@@ -1,0 +1,3 @@
+# Add this entry to filip's user crontab with crontab -e.
+# Existing downloads run at 03:00; retention runs at 04:00 in the Pi's timezone.
+0 4 * * * /usr/bin/python3 /var/kubedev/kubedev/scripts/cleanup-vps-backups.py --apply 2>&1 | /usr/bin/logger -t kubedev-vps-backup-retention

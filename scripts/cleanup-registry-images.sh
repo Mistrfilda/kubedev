@@ -102,12 +102,12 @@ restore_registry_write_mode() {
 
     if [[ "$REGISTRY_READ_ONLY_WAS_PRESENT" == true ]]; then
         if ! "${KUBECTL_COMMAND[@]}" -n container-registry set env deployment/registry \
-            "REGISTRY_STORAGE_MAINTENANCE_READONLY_ENABLED=${REGISTRY_READ_ONLY_ORIGINAL_VALUE}" >/dev/null; then
+            "REGISTRY_STORAGE_MAINTENANCE=${REGISTRY_READ_ONLY_ORIGINAL_VALUE}" >/dev/null; then
             return 1
         fi
     else
         if ! "${KUBECTL_COMMAND[@]}" -n container-registry set env deployment/registry \
-            REGISTRY_STORAGE_MAINTENANCE_READONLY_ENABLED- >/dev/null; then
+            REGISTRY_STORAGE_MAINTENANCE- >/dev/null; then
             return 1
         fi
     fi
@@ -549,56 +549,107 @@ log "Manifest deletion complete."
 
 set_registry_read_only() {
     local env_name
+    local maintenance
 
     env_name="$("${KUBECTL_COMMAND[@]}" -n container-registry get deployment registry \
-        -o 'jsonpath={range .spec.template.spec.containers[0].env[?(@.name=="REGISTRY_STORAGE_MAINTENANCE_READONLY_ENABLED")]}{.name}{end}')"
+        -o 'jsonpath={range .spec.template.spec.containers[0].env[?(@.name=="REGISTRY_STORAGE_MAINTENANCE")]}{.name}{end}')"
 
     REGISTRY_READ_ONLY_ORIGINAL_VALUE="$("${KUBECTL_COMMAND[@]}" -n container-registry get deployment registry \
-        -o 'jsonpath={range .spec.template.spec.containers[0].env[?(@.name=="REGISTRY_STORAGE_MAINTENANCE_READONLY_ENABLED")]}{.value}{end}')"
+        -o 'jsonpath={range .spec.template.spec.containers[0].env[?(@.name=="REGISTRY_STORAGE_MAINTENANCE")]}{.value}{end}')"
 
     if [[ -n "$env_name" ]]; then
         REGISTRY_READ_ONLY_WAS_PRESENT=true
     fi
 
-    case "$REGISTRY_READ_ONLY_ORIGINAL_VALUE" in
-        true|TRUE|True|yes|YES|Yes|1)
-            log "Registry was already read-only."
-            return
-            ;;
-    esac
+    maintenance="$REGISTRY_READ_ONLY_ORIGINAL_VALUE"
+    [[ -n "$maintenance" ]] || maintenance='{}'
+    if ! maintenance="$(printf '%s' "$maintenance" | jq -ce '
+        if type != "object" then error("maintenance must be an object")
+        else .readonly = ((.readonly // {}) + {enabled: true}) end
+    ')"; then
+        die "Existing REGISTRY_STORAGE_MAINTENANCE must be a JSON object for automatic GC"
+    fi
 
+    if [[ "$REGISTRY_READ_ONLY_WAS_PRESENT" == true ]] &&
+        printf '%s' "$REGISTRY_READ_ONLY_ORIGINAL_VALUE" | jq -e '.readonly.enabled == true' >/dev/null; then
+        log "Registry was already read-only."
+        return
+    fi
+
+    # Distribution 2.x misdecodes the deeply nested ...READONLY_ENABLED override.
+    # Passing the whole maintenance mapping avoids its startup panic.
     "${KUBECTL_COMMAND[@]}" -n container-registry set env deployment/registry \
-        REGISTRY_STORAGE_MAINTENANCE_READONLY_ENABLED=true >/dev/null
+        "REGISTRY_STORAGE_MAINTENANCE=${maintenance}" >/dev/null
     REGISTRY_READ_ONLY_CHANGED=true
 
     "${KUBECTL_COMMAND[@]}" -n container-registry rollout status deployment/registry \
         --timeout=180s >/dev/null
 }
 
+ready_registry_pod() {
+    local selector
+    local pods
+    local attempt
+    local exec_log="$WORK_DIR/registry-exec-probe.log"
+
+    selector="$("${KUBECTL_COMMAND[@]}" -n container-registry get deployment registry \
+        -o 'go-template={{range $key, $value := .spec.selector.matchLabels}}{{$key}}={{$value}},{{end}}')"
+    selector="${selector%,}"
+    [[ -n "$selector" ]] || die "Registry deployment has no pod selector"
+
+    # Pod readiness and the kubelet's exec connection can lag rollout completion.
+    for attempt in {1..15}; do
+        pods="$("${KUBECTL_COMMAND[@]}" -n container-registry get pods -l "$selector" \
+            -o 'jsonpath={range .items[*]}{.metadata.name}{"\t"}{.metadata.deletionTimestamp}{"\t"}{.status.containerStatuses[0].ready}{"\n"}{end}' |
+            awk -F '\t' '$2 == "" && $3 == "true" { print $1 }')"
+
+        if [[ -n "$pods" && "$pods" != *$'\n'* ]]; then
+            if "${KUBECTL_COMMAND[@]}" -n container-registry exec "$pods" -- \
+                registry --version > "$exec_log" 2>&1; then
+                printf '%s\n' "$pods"
+                return
+            fi
+        fi
+        sleep 2
+    done
+    [[ ! -f "$exec_log" ]] || cat "$exec_log" >&2
+    die "Registry did not provide exactly one ready pod with a working exec connection"
+}
+
 run_registry_garbage_collection() {
+    local registry_pod
+    local gc_log="$WORK_DIR/registry-garbage-collection.log"
+    local write_status
+
     log "Switching registry to read-only mode..."
     set_registry_read_only
 
-    log "Running registry garbage collection..."
-    "${KUBECTL_COMMAND[@]}" -n container-registry exec deployment/registry -- \
-        registry garbage-collect /etc/docker/registry/config.yml 2>&1 |
-        awk '
-            /blobs marked/ ||
-            /eligible for deletion/ ||
-            /level=(error|fatal)/ {
-                print
-            }
-        '
+    # exec deployment/registry can select the old pod while it is terminating.
+    registry_pod="$(ready_registry_pod)"
+    # Verify the API refuses writes before deleting any blobs.
+    write_status="$("${CURL[@]}" --output /dev/null --write-out '%{http_code}' \
+        --request POST "${REGISTRY_URL}/v2/${REPOSITORIES[0]}/blobs/uploads/")"
+    [[ "$write_status" == 405 ]] ||
+        die "Registry did not reject an upload in read-only mode (HTTP ${write_status})"
+    log "Running registry garbage collection in ${registry_pod}..."
+    if ! "${KUBECTL_COMMAND[@]}" -n container-registry exec "$registry_pod" -- \
+        registry garbage-collect /etc/docker/registry/config.yml > "$gc_log" 2>&1; then
+        cat "$gc_log" >&2
+        die "Registry garbage collection failed"
+    fi
+    awk '/^[0-9]+ blobs marked/ || /level=(error|fatal)/ { print }' "$gc_log"
 
     if [[ "$REGISTRY_READ_ONLY_CHANGED" == true ]]; then
         log "Restoring registry write mode..."
         restore_registry_write_mode
     fi
 
-    "${CURL[@]}" --fail "${REGISTRY_URL}/v2/" >/dev/null ||
+    "${CURL[@]}" --fail --retry 6 --retry-connrefused --retry-delay 1 \
+        "${REGISTRY_URL}/v2/" >/dev/null ||
         die "Registry did not become ready after garbage collection"
 
-    "${KUBECTL_COMMAND[@]}" -n container-registry exec deployment/registry -- \
+    registry_pod="$(ready_registry_pod)"
+    "${KUBECTL_COMMAND[@]}" -n container-registry exec "$registry_pod" -- \
         du -sh /var/lib/registry
 }
 
