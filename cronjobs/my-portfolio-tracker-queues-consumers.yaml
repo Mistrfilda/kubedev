@@ -25,7 +25,7 @@ spec:
                                 mountPath: /var/puppeter/files
                               - name: gemini
                                 mountPath: /var/resources/gemini
-                    restartPolicy: OnFailure
+                    restartPolicy: Never
                     volumes:
                         - name: log-data
                           persistentVolumeClaim:
@@ -66,7 +66,7 @@ spec:
                                 mountPath: /var/puppeter/files
                               - name: gemini
                                 mountPath: /var/resources/gemini
-                    restartPolicy: OnFailure
+                    restartPolicy: Never
                     volumes:
                         - name: log-data
                           persistentVolumeClaim:
@@ -108,7 +108,7 @@ spec:
                                 mountPath: /var/puppeter/files
                               - name: gemini
                                 mountPath: /var/resources/gemini
-                    restartPolicy: OnFailure
+                    restartPolicy: Never
                     volumes:
                         - name: log-data
                           persistentVolumeClaim:
