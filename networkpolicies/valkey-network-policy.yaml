@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+    name: valkey
+    namespace: valkey
+spec:
+    podSelector:
+        matchLabels:
+            app: valkey
+    policyTypes:
+        - Ingress
+    ingress:
+        - from:
+              - namespaceSelector:
+                    matchLabels:
+                        kubernetes.io/metadata.name: default
+          ports:
+              - protocol: TCP
+                port: 6379

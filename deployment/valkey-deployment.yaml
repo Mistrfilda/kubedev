@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: valkey
+    namespace: valkey
+    labels:
+        app: valkey
+spec:
+    replicas: 1
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            app: valkey
+    template:
+        metadata:
+            labels:
+                app: valkey
+        spec:
+            automountServiceAccountToken: false
+            securityContext:
+                runAsNonRoot: true
+                runAsUser: 999
+                runAsGroup: 999
+                fsGroup: 999
+                seccompProfile:
+                    type: RuntimeDefault
+            containers:
+                - name: valkey
+                  image: valkey/valkey:9.0.7-alpine@sha256:2d04268dfa26ab31cfa3fdc538866e76438b2d00e41db41b8cb86d780ac5a416
+                  imagePullPolicy: IfNotPresent
+                  command:
+                      - valkey-server
+                  args:
+                      - --bind
+                      - 0.0.0.0
+                      - --protected-mode
+                      - "no"
+                      - --save
+                      - ""
+                      - --appendonly
+                      - "no"
+                      - --maxmemory
+                      - 64mb
+                      - --maxmemory-policy
+                      - allkeys-lru
+                      - --dir
+                      - /data
+                  ports:
+                      - name: redis
+                        containerPort: 6379
+                        protocol: TCP
+                  resources:
+                      requests:
+                          cpu: 25m
+                          memory: 64Mi
+                      limits:
+                          cpu: 250m
+                          memory: 128Mi
+                  startupProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - 'test "$(valkey-cli ping)" = PONG'
+                      periodSeconds: 2
+                      timeoutSeconds: 2
+                      failureThreshold: 30
+                  readinessProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - 'test "$(valkey-cli ping)" = PONG'
+                      periodSeconds: 10
+                      timeoutSeconds: 2
+                      failureThreshold: 3
+                  livenessProbe:
+                      exec:
+                          command:
+                              - sh
+                              - -ec
+                              - 'test "$(valkey-cli ping)" = PONG'
+                      periodSeconds: 20
+                      timeoutSeconds: 2
+                      failureThreshold: 3
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                          drop:
+                              - ALL
+                  volumeMounts:
+                      - name: data
+                        mountPath: /data
+            volumes:
+                - name: data
+                  emptyDir:
+                      sizeLimit: 16Mi
