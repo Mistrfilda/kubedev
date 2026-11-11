@@ -100,3 +100,20 @@ kubectl -n default exec deployment/php-deployment -c php-container -- \
 ```
 
 Klíče zálohuj odděleně a PVC nemaž při běžném nasazení. Použitá storage class má reclaim policy `Delete`; odstranění PVC může smazat jeho data. [MicroK8s hostpath storage](https://canonical.com/microk8s/docs/addon-hostpath-storage) ukládá data na konkrétním uzlu a nenahrazuje zálohu.
+
+Úklid Redis cache
+-----
+
+CronJob `php-redis-cache-gc` v `cronjobs/my-portfolio-tracker-cronjobs.yaml` spouští každý den ve **03:15 Europe/Prague** příkaz `php bin/console redis:cache:gc --no-interaction`. Používá PHP image aplikace, její konfiguraci Redis cache a uživatele `www-data`; aplikuje ho stávající `scripts/deploy-my-portfolio-tracker.sh`.
+
+Příkaz odstraňuje metadata po expirovaných položkách cache. Platné položky cache, session a zámky zachovává. Samotné hodnoty expiruje Redis průběžně. Denní interval lze zkrátit podle růstu metadat a délky úklidu; knihovna doporučuje jako výchozí interval 15 minut.
+
+Běhy se nepřekrývají (`concurrencyPolicy: Forbid`), úloha má limit 10 minut a jeden opakovaný pokus při chybě. Výstup uvádí počet zkontrolovaných a odstraněných položek a délku běhu. Dokončené Jobs se automaticky odstraňují po 24 hodinách.
+
+Po nasazení lze ověřit plán a poslední výsledek:
+
+```bash
+kubectl --context microk8s -n default get cronjob php-redis-cache-gc
+kubectl --context microk8s -n default get jobs --sort-by=.metadata.creationTimestamp
+kubectl --context microk8s -n default logs job/<job-name> -c php-container
+```
