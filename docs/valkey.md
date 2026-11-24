@@ -30,8 +30,8 @@ The container memory limit leaves room above `maxmemory` for allocator overhead 
 These are starting limits for a small cache; monitor memory, evictions, and CPU throttling before increasing them.
 The small disk-backed `emptyDir` supplies a writable working directory, not persistent storage.
 
-Cache and sessions share the instance and its eviction policy. Sessions can be evicted under memory pressure.
-A PHP application deployment preserves unexpired keys while Valkey remains running. A Valkey process restart
+Cache (DB 0) and sessions (DB 1) share the instance and its eviction policy. Sessions can be evicted under memory pressure.
+A PHP application deployment flushes cache DB 0 in `scripts/deploy-my-portfolio-tracker.sh` to avoid stale serialized DTOs across versions, while preserving sessions in DB 1. A Valkey process restart
 or pod replacement clears all keys, including sessions. Application TTLs and login expiration still apply.
 The `Recreate` deployment strategy avoids routing clients to two independent caches during a Valkey update;
 that update causes a brief cache outage and starts with an empty dataset.

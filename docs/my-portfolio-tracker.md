@@ -108,7 +108,7 @@ CronJob `php-redis-cache-gc` v `cronjobs/my-portfolio-tracker-cronjobs.yaml` spo
 
 Příkaz odstraňuje metadata po expirovaných položkách cache. Platné položky cache, session a zámky zachovává. Samotné hodnoty expiruje Redis průběžně. Denní interval lze zkrátit podle růstu metadat a délky úklidu; knihovna doporučuje jako výchozí interval 15 minut.
 
-Běhy se nepřekrývají (`concurrencyPolicy: Forbid`), úloha má limit 10 minut a jeden opakovaný pokus při chybě. Výstup uvádí počet zkontrolovaných a odstraněných položek a délku běhu. Dokončené Jobs se automaticky odstraňují po 24 hodinách.
+Běhy se nepřekrývají (`concurrencyPolicy: Forbid`), úloha má limit 10 minut a při chybě se neopakuje (`backoffLimit: 0`). Výstup uvádí počet zkontrolovaných a odstraněných položek a délku běhu. Dokončené Jobs se automaticky odstraňují po 24 hodinách.
 
 Po nasazení lze ověřit plán a poslední výsledek:
 
